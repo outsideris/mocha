@@ -1,6 +1,9 @@
 ###
 ### .travis.yml
 ###
+os:
+  - linux
+  - windows
 
 # these are executed in order.  each must pass for the next to be run
 stages:
@@ -41,9 +44,13 @@ jobs:
     - &node
       script: npm start test.node
       node_js: '10'
+      os:
+        - linux
+        - windows
 
     - <<: *node
       node_js: '8'
+      os: windows
 
     - <<: *node
       node_js: '6'
