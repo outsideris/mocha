@@ -16,9 +16,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - env:
+        env:
           NODE_ENV: production
       - run: npm install
+      - run: echo $NODE_ENV
       - run: ./bin/mocha --no-config --reporter spec test/sanity/sanity.spec.js
 
   lint:
@@ -29,7 +30,7 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12.x
-      - env:
+        env:
           NODE_ENV: production
       - run: npm install
       - run: ./bin/mocha --no-config --reporter spec test/sanity/sanity.spec.js
@@ -41,10 +42,9 @@ jobs:
         node-version: [10.x, 12.x, 13.x]
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v2
+      #      - uses: actions/checkout@v2
       - name: Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
-      - uses:
