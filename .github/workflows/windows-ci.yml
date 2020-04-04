@@ -8,32 +8,29 @@ on:
       - release/*
 
 jobs:
+  env:
+    CI: true
   smoke:
     runs-on: ubuntu-latest
     steps:
+      - env:
+        NODE_ENV: production
       - uses: actions/checkout@v2
-      - name: lint
-        uses: actions/setup-node@v1
+      - uses: actions/setup-node@v1
         with:
           node-version: 12.x
-        env:
-          NODE_ENV: production
-      - run: npm install
-      - run: echo $NODE_ENV
-      - run: ./bin/mocha --no-config --reporter spec test/sanity/sanity.spec.js
+      - name: npm install
+        run: npm install
+      - name: NODE_ENV
+        run: echo $NODE_ENV
+      - name: smoke test
+        run: ./bin/mocha --no-config --reporter spec test/sanity/sanity.spec.js
 
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: lint
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-        env:
-          NODE_ENV: production
-      - run: npm install
-      - run: ./bin/mocha --no-config --reporter spec test/sanity/sanity.spec.js
+        run: npm start lint
 
   test:
     strategy:
