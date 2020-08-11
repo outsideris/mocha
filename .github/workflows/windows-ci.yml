@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v1
       - name: find commit msg for PR
         if: github.event_name == 'pull_request'
-        run: echo "::set-env HEAD_COMMIT_MSG=$(git log --no-merges -1 --oneline)"
+        run: echo "::set-env name=HEAD_COMMIT_MSG::$(git log --no-merges -1 --oneline)"
   prepare2:
     name: prepare2
     runs-on: ubuntu-latest
