@@ -2,8 +2,15 @@ name: Windows CI
 on: [push, pull_request]
 
 jobs:
+  skip-ci:
+    name: Check to skip CI
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[ci skip]') }}
+    steps:
+      - run: echo "${{ github.event.head_commit.message }}"
   smoke:
     name: Smoke on Node.js v${{ matrix.node }}
+    needs: skip-ci
     runs-on: windows-2019
     strategy:
       matrix:
