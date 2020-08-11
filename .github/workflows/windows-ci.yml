@@ -5,8 +5,12 @@ jobs:
   skip-ci2:
     name: Check to skip CI2
     runs-on: ubuntu-latest
+    env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
     steps:
       - run: echo "${{ github.event.head_commit.message }}"
+      - run: echo "$GITHUB_CONTEXT"
+      - run: echo "${{ toJson(github.event) }}"
   skip-ci:
     name: Check to skip CI
     runs-on: ubuntu-latest
