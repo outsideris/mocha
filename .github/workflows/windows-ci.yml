@@ -16,13 +16,27 @@ jobs:
     steps:
       - name: find commit msg for PR
         run: echo $HEAD_COMMIT_MSG
+  skip-ci2:
+    name: Check to skip CI2
+    needs: prepare
+    runs-on: ubuntu-latest
+    if: ${{ !contains(env.HEAD_COMMIT_MSG, '[ci skip]') }}
+    steps:
+      - run: echo "${{ github.event.head_commit.message }}"
   skip-ci:
     name: Check to skip CI
     needs: prepare
     runs-on: ubuntu-latest
-    if: ${{ !contains(github.event.head_commit.message, '[ci skip]') ||  !contains(env.HEAD_COMMIT_MSG, '[ci skip]') }}
+    if: ${{ !contains(env.HEAD_COMMIT_MSG, '[ci skip]') }}
     steps:
       - run: echo "${{ github.event.head_commit.message }}"
+  #  skip-ci:
+  #    name: Check to skip CI
+  #    needs: prepare
+  #    runs-on: ubuntu-latest
+  #    if: ${{ !contains(github.event.head_commit.message, '[ci skip]') ||  !contains(env.HEAD_COMMIT_MSG, '[ci skip]') }}
+  #    steps:
+  #      - run: echo "${{ github.event.head_commit.message }}"
   smoke:
     name: Smoke on Node.js v${{ matrix.node }}
     needs: skip-ci
