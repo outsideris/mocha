@@ -22,7 +22,7 @@ jobs:
       - name: find commit msg for PR
         run: echo ${{ needs.prepare.outputs.HEAD_COMMIT_MSG }}
   skip-ci:
-    name: Check to skip CI
+    name: Check to skip CI new
     needs: prepare
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, '[ci skip]') ||  !contains(needs.prepare.outputs.HEAD_COMMIT_MSG, '[ci skip]') }}
