@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 jobs:
   prepare:
-    name: Check to skip CI2
+    name: Check to skip CI 2
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
