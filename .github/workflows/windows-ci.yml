@@ -39,7 +39,8 @@ jobs:
   #      - run: echo "${{ github.event.head_commit.message }}"
   smoke:
     name: Smoke on Node.js v${{ matrix.node }}
-    needs: skip-ci
+    #    needs: skip-ci
+    needs: prepare2
     runs-on: windows-2019
     strategy:
       matrix:
