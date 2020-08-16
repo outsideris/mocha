@@ -5,17 +5,22 @@ jobs:
   prepare:
     name: Check to skip CI 2 a
     runs-on: ubuntu-latest
+    outputs:
+      HEAD_COMMIT_MSG: ${{ steps.commitMsg.outputs.HEAD_COMMIT_MSG }}
     steps:
       - uses: actions/checkout@v1
       - name: find commit msg for PR
+        id: commitMsg
         if: github.event_name == 'pull_request'
-        run: echo "::set-env name=HEAD_COMMIT_MSG::$(git log --no-merges -1 --oneline)"
+        run: echo "::set-output name=HEAD_COMMIT_MSG::$(git log --no-merges -1 --oneline)"
+      - run: echo $HEAD_COMMIT_MSG
   prepare2:
     name: prepare2
     runs-on: ubuntu-latest
+    needs: prepare
     steps:
       - name: find commit msg for PR
-        run: echo $HEAD_COMMIT_MSG
+        run: echo ${{ needs.prepare.outputs.HEAD_COMMIT_MSG }}
   #  skip-ci2:
   #    name: Check to skip CI2
   #    needs: prepare
