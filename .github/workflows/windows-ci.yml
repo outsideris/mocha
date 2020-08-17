@@ -14,7 +14,6 @@ jobs:
         id: commitMsg
         if: github.event_name == 'pull_request'
         run: echo "::set-output name=HEAD_COMMIT_MSG::$(git log --no-merges -1 --oneline)"
-      - run: echo $HEAD_COMMIT_MSG
   check-skip:
     name: Check to skip CI
     needs: prepare-commit-msg
