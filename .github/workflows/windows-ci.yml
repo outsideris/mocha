@@ -2,36 +2,29 @@ name: Windows CI
 on: [push, pull_request]
 
 jobs:
-  prepare:
-    name: Check to skip CI 2 a
+  prepare-commit-msg:
+    name: Retrive head commit message
     runs-on: ubuntu-latest
     outputs:
       HEAD_COMMIT_MSG: ${{ steps.commitMsg.outputs.HEAD_COMMIT_MSG }}
     steps:
       - uses: actions/checkout@v1
+        if: github.event_name == 'pull_request'
       - name: find commit msg for PR
         id: commitMsg
         if: github.event_name == 'pull_request'
         run: echo "::set-output name=HEAD_COMMIT_MSG::$(git log --no-merges -1 --oneline)"
       - run: echo $HEAD_COMMIT_MSG
-  prepare2:
-    name: prepare2
-    runs-on: ubuntu-latest
-    needs: prepare
-    steps:
-      - name: find commit msg for PR
-        run: echo ${{ needs.prepare.outputs.HEAD_COMMIT_MSG }}
-  skip-ci:
-    name: Check to skip CI new
-    needs: prepare
+  check-skip:
+    name: Check to skip CI
+    needs: prepare-commit-msg
     runs-on: ubuntu-latest
     if: ${{ !contains(github.event.head_commit.message, '[ci skip]') && !contains(needs.prepare.outputs.HEAD_COMMIT_MSG, '[ci skip]') }}
     steps:
       - run: echo "${{ github.event.head_commit.message }}"
   smoke:
     name: Smoke on Node.js v${{ matrix.node }}
-    #    needs: skip-ci
-    needs: prepare2
+    needs: check-skip
     runs-on: windows-2019
     strategy:
       matrix:
