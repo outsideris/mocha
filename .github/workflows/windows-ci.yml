@@ -1,6 +1,5 @@
 name: Windows CI
 on: [push, pull_request]
-
 jobs:
   prepare-commit-msg:
     name: Retrive head commit message
